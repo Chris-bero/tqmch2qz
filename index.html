@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Quality Management - Lecture 2 Premium Quizzes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F4F7F6; --surface: #FFFFFF; --primary: #0F172A; --secondary: #334155;
+            --accent: #C5A059; --accent-light: rgba(197, 160, 89, 0.1); --text-main: #1E293B;
+            --text-muted: #64748B; --success: #059669; --success-bg: rgba(5, 150, 105, 0.1);
+            --error: #DC2626; --error-bg: rgba(220, 38, 38, 0.1); --border: #E2E8F0;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            --radius: 16px; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: var(--text-main); line-height: 1.6; font-family: 'Inter', sans-serif; transition: var(--transition); }
+        body[dir="rtl"] { font-family: 'Cairo', sans-serif; }
+        header { background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%); color: white; padding: 2.5rem 0; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
+        header::before { content: ''; position: absolute; top: -50%; right: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, transparent 70%); border-radius: 50%; }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+        .brand { display: flex; flex-direction: column; text-align: center; }
+        .brand h1 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+        body[dir="rtl"] .brand h1 { font-family: 'Cairo', sans-serif; font-size: 1.8rem; }
+        .brand span { color: var(--accent); font-size: 0.9rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; }
+        .fab-translate { position: fixed; bottom: 30px; right: 30px; z-index: 1000; background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%); color: var(--accent); border: 2px solid var(--accent); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 15px rgba(197, 160, 89, 0.2); transition: var(--transition); overflow: hidden; }
+        [dir="rtl"] .fab-translate { right: auto; left: 30px; }
+        .fab-translate:hover { transform: scale(1.1); box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 0 25px rgba(197, 160, 89, 0.4); background: var(--accent); color: var(--primary); }
+        .fab-icon { font-size: 1.5rem; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .fab-translate.animate .fab-icon { transform: rotate(360deg) scale(1.2); }
+        .fab-tooltip { position: absolute; right: 75px; background: var(--primary); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; transform: translateX(10px); }
+        [dir="rtl"] .fab-tooltip { right: auto; left: 75px; transform: translateX(-10px); }
+        .fab-translate:hover .fab-tooltip { opacity: 1; transform: translateX(0); }
+        .tabs-wrapper { margin-top: -30px; margin-bottom: 40px; position: relative; z-index: 2; }
+        .tabs { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .tab-btn { padding: 14px 40px; background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); border-radius: 50px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: var(--transition); box-shadow: var(--shadow-sm); }
+        .tab-btn:hover { color: var(--primary); border-color: var(--accent); }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2); }
+        .quiz-container { background: var(--surface); padding: 40px; border-radius: var(--radius); box-shadow: var(--shadow-md); margin-bottom: 60px; border: 1px solid var(--border); animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .quiz-title { text-align: center; color: var(--primary); margin-bottom: 40px; font-family: 'Playfair Display', serif; font-size: 1.6rem; position: relative; padding-bottom: 15px; }
+        body[dir="rtl"] .quiz-title { font-family: 'Cairo', sans-serif; }
+        .quiz-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--accent); border-radius: 2px; }
+        .question-block { margin-bottom: 32px; padding: 28px; background: #FAFCFC; border-radius: 12px; border: 1px solid var(--border); transition: var(--transition); }
+        .question-block:hover { border-color: #CBD5E1; box-shadow: var(--shadow-sm); }
+        .question-number { display: inline-flex; align-items: center; justify-content: center; background: var(--primary); color: white; width: 28px; height: 28px; border-radius: 50%; font-size: 0.85rem; font-weight: bold; margin-right: 12px; flex-shrink: 0; }
+        body[dir="rtl"] .question-number { margin-right: 0; margin-left: 12px; }
+        .question-text { font-weight: 600; font-size: 1.05rem; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option-card { display: flex; align-items: center; padding: 16px 20px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; transition: var(--transition); }
+        .option-card:hover { border-color: var(--accent); background: var(--accent-light); transform: translateX(4px); }
+        body[dir="rtl"] .option-card:hover { transform: translateX(-4px); }
+        .option-card.selected { border-color: var(--accent); background: var(--accent-light); box-shadow: 0 4px 12px rgba(197, 160, 89, 0.15); }
+        .option-card input[type="radio"] { display: none; }
+        .custom-radio { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%; margin-right: 15px; display: flex; align-items: center; justify-content: center; transition: var(--transition); flex-shrink: 0; }
+        body[dir="rtl"] .custom-radio { margin-right: 0; margin-left: 15px; }
+        .option-card.selected .custom-radio { border-color: var(--accent); background: var(--accent); }
+        .option-card.selected .custom-radio::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
+        .option-text { font-size: 0.95rem; color: var(--text-main); font-weight: 500; }
+        .option-card.correct { border-color: var(--success) !important; background: var(--success-bg) !important; }
+        .option-card.correct .custom-radio { border-color: var(--success); background: var(--success); }
+        .option-card.incorrect { border-color: var(--error) !important; background: var(--error-bg) !important; }
+        .option-card.incorrect .custom-radio { border-color: var(--error); background: var(--error); }
+        .explanation-box { margin-top: 20px; padding: 18px 20px; background: #FFFBF0; border-left: 4px solid var(--accent); border-radius: 8px; display: none; opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .explanation-box.show { display: block; opacity: 1; transform: translateY(0); }
+        [dir="rtl"] .explanation-box { border-left: none; border-right: 4px solid var(--accent); }
+        .explanation-header { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 0.95rem; }
+        .explanation-icon { color: var(--accent); font-size: 1.1rem; }
+        .explanation-text { color: var(--secondary); font-size: 0.92rem; line-height: 1.7; }
+        .submit-btn { display: block; width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 30px; transition: var(--transition); box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2); }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(15, 23, 42, 0.3); }
+        .result-box { margin-top: 30px; padding: 30px; border-radius: 12px; text-align: center; display: none; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .result-box.correct { background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(5, 150, 105, 0.1)); border: 1px solid var(--success); }
+        .result-box.incorrect { background: linear-gradient(135deg, rgba(220, 38, 38, 0.05), rgba(220, 38, 38, 0.1)); border: 1px solid var(--error); }
+        .score-display { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; }
+        .result-box.correct .score-display { color: var(--success); }
+        .result-box.incorrect .score-display { color: var(--error); }
+        .result-msg { font-size: 1.1rem; color: var(--text-muted); font-weight: 500; }
+        footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 40px; }
+        @media (max-width: 768px) {
+            .brand h1 { font-size: 1.5rem; } .quiz-container { padding: 24px; } .question-block { padding: 20px; }
+            .fab-translate { width: 50px; height: 50px; bottom: 20px; right: 20px; } [dir="rtl"] .fab-translate { left: 20px; right: auto; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="brand">
+            <h1 id="main-title">Total Quality Management</h1>
+            <span id="sub-title">Lecture 2: Quality Control & ISO Standards</span>
+        </div>
+    </div>
+</header>
+
+<button class="fab-translate" id="fab-translate" onclick="toggleLanguage(this)">
+    <span class="fab-icon">🌐</span>
+    <span class="fab-tooltip" id="fab-tooltip">Translate to العربية</span>
+</button>
+
+<div class="container">
+    <div class="tabs-wrapper">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchQuiz(0)" id="tab-0">Quiz 1</button>
+            <button class="tab-btn" onclick="switchQuiz(1)" id="tab-1">Quiz 2</button>
+        </div>
+    </div>
+    <div class="quiz-container">
+        <h2 class="quiz-title" id="quiz-title"></h2>
+        <form id="quiz-form"></form>
+        <button class="submit-btn" id="submit-btn" onclick="submitQuiz()">Submit Answers</button>
+        <div class="result-box" id="result-box">
+            <div class="score-display" id="score-display"></div>
+            <div class="result-msg" id="result-msg"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p id="footer-text">Based on "Total Quality Management" - Lecture 2</p>
+</footer>
+
+<script>
+    let currentLang = 'en';
+    let currentQuizIndex = 0;
+    let userAnswers = {}; 
+    let submittedQuizzes = {}; 
+
+    const translations = {
+        en: {
+            mainTitle: "Total Quality Management", subTitle: "Lecture 2: Quality Control & ISO Standards",
+            fabTooltip: "Translate to العربية", submitBtn: "Submit Answers",
+            footer: "Based on \"Total Quality Management\" - Lecture 2",
+            resultCorrect: "Outstanding! You have mastered this section.",
+            resultIncorrect: "Good effort. Review the explanations below and try again.",
+            explainTitle: "Explanation"
+        },
+        ar: {
+            mainTitle: "إدارة الجودة الشاملة", subTitle: "المحاضرة الثانية: ضبط الجودة ومعايير الآيزو",
+            fabTooltip: "Translate to English", submitBtn: "إرسال الإجابات",
+            footer: "بناءً على مادة \"إدارة الجودة الشاملة\" - المحاضرة الثانية",
+            resultCorrect: "أداء ممتاز! لقد أتقنت هذا القسم.",
+            resultIncorrect: "جهد جيد. راجع الشرح أدناه وحاول مرة أخرى.",
+            explainTitle: "الشرح"
+        }
+    };
+
+    const quizzes = [
+        {
+            title: { en: "Quiz 1: Quality Control Process & Need for QC", ar: "الاختبار الأول: عملية ضبط الجودة والحاجة لضبط الجودة" },
+            questions: [
+                { q: { en: "What is the FIRST step in the Quality Control process?", ar: "ما هي الخطوة الأولى في عملية ضبط الجودة؟" }, options: [ { en: "Preparation of policies regarding quality.", ar: "إعداد السياسات المتعلقة بالجودة." }, { en: "Designing the productive system.", ar: "تصميم النظام الإنتاجي." }, { en: "Inspection of final product.", ar: "فحص المنتج النهائي." }, { en: "Production of goods and services.", ar: "إنتاج السلع والخدمات." } ], answer: 0, explanation: { en: "The first step in the Quality Control process is the preparation of policies regarding quality.", ar: "الخطوة الأولى في عملية ضبط الجودة هي إعداد السياسات المتعلقة بالجودة." } },
+                { q: { en: "What is the SECOND step in the Quality Control process?", ar: "ما هي الخطوة الثانية في عملية ضبط الجودة؟" }, options: [ { en: "Inspection and Control of Materials.", ar: "فحص ومراقبة المواد." }, { en: "Fixation of quality standard relating to materials and process.", ar: "تحديد معايير الجودة المتعلقة بالمواد والعملية." }, { en: "Preparation of policies.", ar: "إعداد السياسات." }, { en: "Production of goods.", ar: "إنتاج السلع." } ], answer: 1, explanation: { en: "Step 2 is the fixation of quality standard relating to materials and process.", ar: "الخطوة الثانية هي تحديد معايير الجودة المتعلقة بالمواد والعملية." } },
+                { q: { en: "What is the THIRD step in the Quality Control process?", ar: "ما هي الخطوة الثالثة في عملية ضبط الجودة؟" }, options: [ { en: "Designing the productive system.", ar: "تصميم النظام الإنتاجي." }, { en: "Inspection of final product.", ar: "فحص المنتج النهائي." }, { en: "Fixation of quality standards.", ar: "تحديد معايير الجودة." }, { en: "Preparation of policies.", ar: "إعداد السياسات." } ], answer: 0, explanation: { en: "Step 3 is designing the productive system.", ar: "الخطوة الثالثة هي تصميم النظام الإنتاجي." } },
+                { q: { en: "What is the FOURTH step in the Quality Control process?", ar: "ما هي الخطوة الرابعة في عملية ضبط الجودة؟" }, options: [ { en: "Production of goods and services.", ar: "إنتاج السلع والخدمات." }, { en: "Inspection and Control of Materials.", ar: "فحص ومراقبة المواد." }, { en: "Designing the system.", ar: "تصميم النظام." }, { en: "Preparation of policies.", ar: "إعداد السياسات." } ], answer: 1, explanation: { en: "Step 4 is the inspection and control of materials.", ar: "الخطوة الرابعة هي فحص ومراقبة المواد." } },
+                { q: { en: "What is the FIFTH step in the Quality Control process?", ar: "ما هي الخطوة الخامسة في عملية ضبط الجودة؟" }, options: [ { en: "Inspection of final product.", ar: "فحص المنتج النهائي." }, { en: "Production of goods and services.", ar: "إنتاج السلع والخدمات." }, { en: "Designing the system.", ar: "تصميم النظام." }, { en: "Fixation of standards.", ar: "تحديد المعايير." } ], answer: 1, explanation: { en: "Step 5 is the production of goods and services.", ar: "الخطوة الخامسة هي إنتاج السلع والخدمات." } },
+                { q: { en: "What is the FINAL (SIXTH) step in the Quality Control process?", ar: "ما هي الخطوة النهائية (السادسة) في عملية ضبط الجودة؟" }, options: [ { en: "Inspection of final product.", ar: "فحص المنتج النهائي." }, { en: "Production of goods.", ar: "إنتاج السلع." }, { en: "Preparation of policies.", ar: "إعداد السياسات." }, { en: "Designing the system.", ar: "تصميم النظام." } ], answer: 0, explanation: { en: "The final step (Step 6) is the inspection of the final product.", ar: "الخطوة النهائية (الخطوة 6) هي فحص المنتج النهائي." } },
+                { q: { en: "Which of the following is a reason for the 'Need for controlling quality'?", ar: "أي مما يلي يعتبر سبباً لـ 'الحاجة إلى ضبط الجودة'؟" }, options: [ { en: "Increased flexibility with spare parts.", ar: "زيادة المرونة في استخدام قطع الغيار القياسية." }, { en: "Difficulty in maintaining consistency in quality.", ar: "صعوبة الحفاظ على الاتساق في الجودة." }, { en: "Decreased maintenance costs.", ar: "انخفاض تكاليف الصيانة." }, { en: "Increased lifetime of products.", ar: "زيادة العمر الافتراضي للمنتجات." } ], answer: 1, explanation: { en: "Difficulty in maintaining consistency in quality is a primary reason for the need to control quality.", ar: "صعوبة الحفاظ على الاتساق في الجودة هي سبب رئيسي للحاجة إلى ضبط الجودة." } },
+                { q: { en: "Another reason for the need for controlling quality is:", ar: "سبب آخر للحاجة إلى ضبط الجودة هو:" }, options: [ { en: "Dissatisfied customers due to increased maintenance and operating costs.", ar: "عدم رضا العملاء بسبب زيادة تكاليف الصيانة والتشغيل." }, { en: "Reduced rework cost.", ar: "انخفاض تكلفة إعادة العمل." }, { en: "Having a clear yardstick for comparing quality.", ar: "وجود مقياس واضح لمقارنة الجودة." }, { en: "Standardized spare parts usage.", ar: "استخدام قطع الغيار القياسية." } ], answer: 0, explanation: { en: "Dissatisfied customers due to increased maintenance and operating costs highlight the need for quality control.", ar: "عدم رضا العملاء بسبب زيادة تكاليف الصيانة والتشغيل يبرز الحاجة إلى ضبط الجودة." } },
+                { q: { en: "Increased rework cost while manufacturing products is listed under:", ar: "زيادة تكلفة إعادة العمل أثناء تصنيع المنتجات مدرجة تحت:" }, options: [ { en: "Benefits of ISO 9000.", ar: "فوائد ISO 9000." }, { en: "Need for controlling quality.", ar: "الحاجة إلى ضبط الجودة." }, { en: "8 Dimensions of Quality.", ar: "أبعاد الجودة الثمانية." }, { en: "TQM Philosophy.", ar: "فلسفة إدارة الجودة الشاملة." } ], answer: 1, explanation: { en: "Increased rework cost is a problem that highlights the need for controlling quality.", ar: "زيادة تكلفة إعادة العمل هي مشكلة تبرز الحاجة إلى ضبط الجودة." } },
+                { q: { en: "Reduced flexibility with respect to usage of standard spare parts is a reason for:", ar: "انخفاض المرونة فيما يتعلق باستخدام قطع الغيار القياسية هو سبب لـ:" }, options: [ { en: "Need for controlling quality.", ar: "الحاجة إلى ضبط الجودة." }, { en: "ISO 9000 Registration.", ar: "تسجيل ISO 9000." }, { en: "Quality improvement.", ar: "تحسين الجودة." }, { en: "Customer satisfaction.", ar: "رضا العملاء." } ], answer: 0, explanation: { en: "Reduced flexibility with standard spare parts is listed as a reason for the need for controlling quality.", ar: "انخفاض المرونة مع قطع الغيار القياسية مدرج كسبب للحاجة إلى ضبط الجودة." } },
+                { q: { en: "According to TQM philosophy, the goal is to continuously improve organization processes to result in:", ar: "وفقاً لفلسفة إدارة الجودة الشاملة، الهدف هو التحسين المستمر لعمليات المنظمة مما يؤدي إلى:" }, options: [ { en: "Higher production speed only.", ar: "زيادة سرعة الإنتاج فقط." }, { en: "Customer satisfaction.", ar: "رضا العملاء." }, { en: "Reduced employee training.", ar: "تقليل تدريب الموظفين." }, { en: "Lower product features.", ar: "ميزات منتج أقل." } ], answer: 1, explanation: { en: "TQM philosophy aims to continuously improve organization processes and results in customer satisfaction.", ar: "تهدف فلسفة إدارة الجودة الشاملة إلى التحسين المستمر لعمليات المنظمة مما يؤدي إلى رضا العملاء." } },
+                { q: { en: "According to ISO 9000:2000, quality is defined as:", ar: "وفقاً لـ ISO 9000:2000، تُعرّف الجودة بأنها:" }, options: [ { en: "The degree to which a set of inherent characteristics fulfills requests.", ar: "المدى الذي تلبي فيه مجموعة من الخصائص المتأصلة المتطلبات." }, { en: "Fitness for use.", ar: "الملاءمة للاستخدام." }, { en: "Conformance to specifications.", ar: "الامتثال للمواصفات." }, { en: "Zero defects.", ar: "صفر عيوب." } ], answer: 0, explanation: { en: "ISO 9000:2000 defines quality as the degree to which a set of inherent characteristics fulfills requests.", ar: "يعرّف ISO 9000:2000 الجودة بأنها المدى الذي تلبي فيه مجموعة من الخصائص المتأصلة المتطلبات." } },
+                { q: { en: "Controlling quality is considered an essential activity because it addresses issues like:", ar: "يُعتبر ضبط الجودة نشاطاً أساسياً لأنه يعالج قضايا مثل:" }, options: [ { en: "No yardstick for comparing the quality of goods/services.", ar: "عدم وجود مقياس لمقارنة جودة السلع/الخدمات." }, { en: "Excessive customer satisfaction.", ar: "رضا العملاء المفرط." }, { en: "Decreased operating costs.", ar: "انخفاض تكاليف التشغيل." }, { en: "Increased product lifetime.", ar: "زيادة العمر الافتراضي للمنتج." } ], answer: 0, explanation: { en: "Lack of a yardstick for comparing quality is a key reason why controlling quality is essential.", ar: "عدم وجود مقياس لمقارنة الجودة هو سبب رئيسي يجعل ضبط الجودة نشاطاً أساسياً." } },
+                { q: { en: "If a company faces 'reduced life time of the products/services', this highlights the:", ar: "إذا واجهت شركة 'انخفاض العمر الافتراضي للمنتجات/الخدمات'، فإن هذا يبرز:" }, options: [ { en: "Need for controlling quality.", ar: "الحاجة إلى ضبط الجودة." }, { en: "Success of the quality system.", ar: "نجاح نظام الجودة." }, { en: "Benefits of ISO 9000.", ar: "فوائد ISO 9000." }, { en: "Effectiveness of TQM.", ar: "فعالية إدارة الجودة الشاملة." } ], answer: 0, explanation: { en: "Reduced lifetime of products/services is explicitly listed under the 'Need for controlling quality'.", ar: "انخفاض العمر الافتراضي للمنتجات/الخدمات مدرج صراحة تحت 'الحاجة إلى ضبط الجودة'." } },
+                { q: { en: "Which of the following is NOT a step in the Quality Control process?", ar: "أي مما يلي ليس خطوة في عملية ضبط الجودة؟" }, options: [ { en: "Preparation of policies regarding quality.", ar: "إعداد السياسات المتعلقة بالجودة." }, { en: "Marketing the final product to competitors.", ar: "تسويق المنتج النهائي للمنافسين." }, { en: "Designing the productive system.", ar: "تصميم النظام الإنتاجي." }, { en: "Inspection of final product.", ar: "فحص المنتج النهائي." } ], answer: 1, explanation: { en: "Marketing to competitors is not part of the Quality Control process steps.", ar: "التسويق للمنافسين ليس جزءاً من خطوات عملية ضبط الجودة." } },
+                { q: { en: "What happens immediately after 'Designing the productive system' in the QC process?", ar: "ماذا يحدث مباشرة بعد 'تصميم النظام الإنتاجي' في عملية ضبط الجودة؟" }, options: [ { en: "Preparation of policies.", ar: "إعداد السياسات." }, { en: "Inspection and Control of Materials.", ar: "فحص ومراقبة المواد." }, { en: "Production of goods.", ar: "إنتاج السلع." }, { en: "Inspection of final product.", ar: "فحص المنتج النهائي." } ], answer: 1, explanation: { en: "Step 3 is designing the system, and Step 4 is inspection and control of materials.", ar: "الخطوة 3 هي تصميم النظام، والخطوة 4 هي فحص ومراقبة المواد." } },
+                { q: { en: "The fixation of quality standards in the QC process relates specifically to:", ar: "تحديد معايير الجودة في عملية ضبط الجودة يتعلق تحديداً بـ:" }, options: [ { en: "Employee salaries.", ar: "رواتب الموظفين." }, { en: "Materials and process.", ar: "المواد والعملية." }, { en: "Marketing strategies.", ar: "استراتيجيات التسويق." }, { en: "Competitor analysis.", ar: "تحليل المنافسين." } ], answer: 1, explanation: { en: "Step 2 is the fixation of quality standard relating to materials and process.", ar: "الخطوة 2 هي تحديد معايير الجودة المتعلقة بالمواد والعملية." } },
+                { q: { en: "The ultimate goal of the Quality Control process steps is to:", ar: "الهدف النهائي لخطوات عملية ضبط الجودة هو:" }, options: [ { en: "Maximize production speed regardless of defects.", ar: "زيادة سرعة الإنتاج بغض النظر عن العيوب." }, { en: "Maintain a desired level of quality in product or service.", ar: "الحفاظ على مستوى مرغوب فيه من الجودة في المنتج أو الخدمة." }, { en: "Reduce employee involvement.", ar: "تقليل مشاركة الموظفين." }, { en: "Ignore customer feedback.", ar: "تجاهل ملاحظات العملاء." } ], answer: 1, explanation: { en: "Quality control is a system used to maintain a desired level of quality in product or service.", ar: "ضبط الجودة هو نظام يُستخدم للحفاظ على مستوى مرغوب فيه من الجودة في المنتج أو الخدمة." } },
+                { q: { en: "Which step comes immediately before 'Production of goods and services'?", ar: "أي خطوة تأتي مباشرة قبل 'إنتاج السلع والخدمات'؟" }, options: [ { en: "Designing the productive system.", ar: "تصميم النظام الإنتاجي." }, { en: "Inspection and Control of Materials.", ar: "فحص ومراقبة المواد." }, { en: "Preparation of policies.", ar: "إعداد السياسات." }, { en: "Inspection of final product.", ar: "فحص المنتج النهائي." } ], answer: 1, explanation: { en: "Step 4 is Inspection and Control of Materials, followed by Step 5: Production of goods and services.", ar: "الخطوة 4 هي فحص ومراقبة المواد، تليها الخطوة 5: إنتاج السلع والخدمات." } },
+                { q: { en: "Hence, controlling quality is considered:", ar: "وبالتالي، يُعتبر ضبط الجودة:" }, options: [ { en: "An optional activity.", ar: "نشاطاً اختيارياً." }, { en: "An essential activity.", ar: "نشاطاً أساسياً." }, { en: "A secondary priority.", ar: "أولوية ثانوية." }, { en: "A government mandate only.", ar: "تفويضاً حكومياً فقط." } ], answer: 1, explanation: { en: "Due to the various risks and costs of poor quality, controlling quality is an essential activity.", ar: "بسبب المخاطر والتكاليف المختلفة لسوء الجودة، يُعتبر ضبط الجودة نشاطاً أساسياً." } }
+            ]
+        },
+        {
+            title: { en: "Quiz 2: 8 Dimensions of Quality, ISO & Implementation", ar: "الاختبار الثاني: أبعاد الجودة الثمانية، الآيزو والتطبيق" },
+            questions: [
+                { q: { en: "Which of the following is one of the '8 Dimensions of Quality'?", ar: "أي مما يلي يعتبر واحداً من 'أبعاد الجودة الثمانية'؟" }, options: [ { en: "Profitability.", ar: "الربحية." }, { en: "Reliability.", ar: "الموثوقية." }, { en: "Market share.", ar: "الحصة السوقية." }, { en: "Employee turnover.", ar: "دوران الموظفين." } ], answer: 1, explanation: { en: "The 8 dimensions include: Performance, Features, Conformance, Reliability, Durability, Service, Aesthetics, and Perceived quality.", ar: "تشمل الأبعاد الثمانية: الأداء، الميزات، المطابقة، الموثوقية، المتانة، الخدمة، الجماليات، والجودة المدركة." } },
+                { q: { en: "Another dimension of quality from the 8 dimensions is:", ar: "بعد آخر للجودة من الأبعاد الثمانية هو:" }, options: [ { en: "Aesthetics.", ar: "الجماليات." }, { en: "Speed of delivery.", ar: "سرعة التسليم." }, { en: "Lowest cost.", ar: "أقل تكلفة." }, { en: "Brand loyalty.", ar: "ولاء العلامة التجارية." } ], answer: 0, explanation: { en: "Aesthetics is one of the 8 dimensions of quality.", ar: "الجماليات هي أحد أبعاد الجودة الثمانية." } },
+                { q: { en: "Which of the following is NOT one of the 8 Dimensions of Quality?", ar: "أي مما يلي ليس من أبعاد الجودة الثمانية؟" }, options: [ { en: "Conformance.", ar: "المطابقة." }, { en: "Durability.", ar: "المتانة." }, { en: "Perceived quality.", ar: "الجودة المدركة." }, { en: "Advertising budget.", ar: "ميزانية الإعلان." } ], answer: 3, explanation: { en: "Advertising budget is not one of the 8 dimensions of quality.", ar: "ميزانية الإعلان ليست من أبعاد الجودة الثمانية." } },
+                { q: { en: "When was the International Organization for Standardization (ISO) founded?", ar: "متى تأسست المنظمة الدولية للمعايير (ISO)؟" }, options: [ { en: "February 23, 1947.", ar: "23 فبراير 1947." }, { en: "January 1, 1950.", ar: "1 يناير 1950." }, { en: "March 15, 1960.", ar: "15 مارس 1960." }, { en: "December 31, 1999.", ar: "31 ديسمبر 1999." } ], answer: 0, explanation: { en: "ISO was founded on February 23, 1947.", ar: "تأسست ISO في 23 فبراير 1947." } },
+                { q: { en: "Where is the ISO headquartered?", ar: "أين يقع المقر الرئيسي لمنظمة ISO؟" }, options: [ { en: "New York, USA.", ar: "نيويورك، الولايات المتحدة." }, { en: "Geneva, Switzerland.", ar: "جنيف، سويسرا." }, { en: "London, UK.", ar: "لندن، المملكة المتحدة." }, { en: "Paris, France.", ar: "باريس، فرنسا." } ], answer: 1, explanation: { en: "ISO is headquartered in Geneva, Switzerland.", ar: "يقع المقر الرئيسي لمنظمة ISO في جنيف، سويسرا." } },
+                { q: { en: "ISO is best described as a:", ar: "يُوصف ISO بشكل أفضل بأنه:" }, options: [ { en: "Governmental regulatory body.", ar: "هيئة تنظيمية حكومية." }, { en: "Non-governmental organization that promulgates industrial and commercial standards.", ar: "منظمة غير حكومية تصدر المعايير الصناعية والتجارية." }, { en: "Private for-profit corporation.", ar: "شركة خاصة هادفة للربح." }, { en: "United Nations military branch.", ar: "فرع عسكري للأمم المتحدة." } ], answer: 1, explanation: { en: "ISO is a non-governmental organization that promulgates industrial and commercial standards.", ar: "ISO هي منظمة غير حكومية تصدر المعايير الصناعية والتجارية." } },
+                { q: { en: "Which ISO standard is specifically for Quality management systems?", ar: "أي معيار ISO مخصص تحديداً لأنظمة إدارة الجودة؟" }, options: [ { en: "ISO 14000.", ar: "ISO 14000." }, { en: "ISO 9000.", ar: "ISO 9000." }, { en: "ISO 27006.", ar: "ISO 27006." }, { en: "ISO 14971.", ar: "ISO 14971." } ], answer: 1, explanation: { en: "ISO 9000 is the international standard for Quality management systems.", ar: "ISO 9000 هو المعيار الدولي لأنظمة إدارة الجودة." } },
+                { q: { en: "Which ISO standard relates to Environmental systems?", ar: "أي معيار ISO يتعلق بالأنظمة البيئية؟" }, options: [ { en: "ISO 9000.", ar: "ISO 9000." }, { en: "ISO 14000.", ar: "ISO 14000." }, { en: "ISO 14065.", ar: "ISO 14065." }, { en: "ISO 27006.", ar: "ISO 27006." } ], answer: 1, explanation: { en: "ISO 14000 is the standard for Environmental systems.", ar: "ISO 14000 هو المعيار الخاص بالأنظمة البيئية." } },
+                { q: { en: "Which ISO standard is for Greenhouse gas validation?", ar: "أي معيار ISO خاص بالتحقق من غازات الدفيئة؟" }, options: [ { en: "ISO 14065.", ar: "ISO 14065." }, { en: "ISO 14971.", ar: "ISO 14971." }, { en: "ISO 27006.", ar: "ISO 27006." }, { en: "ISO 9000.", ar: "ISO 9000." } ], answer: 0, explanation: { en: "ISO 14065 is the standard for Greenhouse gas validation.", ar: "ISO 14065 هو المعيار الخاص بالتحقق من غازات الدفيئة." } },
+                { q: { en: "Which ISO standard relates to Security Techniques?", ar: "أي معيار ISO يتعلق بتقنيات الأمن؟" }, options: [ { en: "ISO 14971.", ar: "ISO 14971." }, { en: "ISO 27006.", ar: "ISO 27006." }, { en: "ISO 14000.", ar: "ISO 14000." }, { en: "ISO 9000.", ar: "ISO 9000." } ], answer: 1, explanation: { en: "ISO 27006 is the standard for Security Techniques.", ar: "ISO 27006 هو المعيار الخاص بتقنيات الأمن." } },
+                { q: { en: "Which ISO standard is for Medical Devices?", ar: "أي معيار ISO خاص بالأجهزة الطبية؟" }, options: [ { en: "ISO 14971.", ar: "ISO 14971." }, { en: "ISO 14065.", ar: "ISO 14065." }, { en: "ISO 27006.", ar: "ISO 27006." }, { en: "ISO 9000.", ar: "ISO 9000." } ], answer: 0, explanation: { en: "ISO 14971 is the standard for Medical Devices.", ar: "ISO 14971 هو المعيار الخاص بالأجهزة الطبية." } },
+                { q: { en: "The relationship between ISO and TQM is that:", ar: "العلاقة بين ISO و TQM هي أن:" }, options: [ { en: "ISO replaces TQM completely.", ar: "ISO تحل محل TQM تماماً." }, { en: "ISO is a subset of TQM.", ar: "ISO هي مجموعة فرعية من TQM." }, { en: "TQM is a subset of ISO.", ar: "TQM هي مجموعة فرعية من ISO." }, { en: "They are entirely unrelated.", ar: "هما غير مرتبطين تماماً." } ], answer: 1, explanation: { en: "ISO is considered a subset of Total Quality Management (TQM).", ar: "تُعتبر ISO مجموعة فرعية من إدارة الجودة الشاملة (TQM)." } },
+                { q: { en: "ISO likes Quality in 4 Dimensions. Which of the following is one of them?", ar: "تحب ISO الجودة في 4 أبعاد. أي مما يلي يعتبر واحداً منها؟" }, options: [ { en: "Total company wide participation.", ar: "المشاركة الشاملة على مستوى الشركة." }, { en: "Focus on short-term profits.", ar: "التركيز على الأرباح قصيرة الأجل." }, { en: "Ignoring customer requirements.", ar: "تجاهل متطلبات العملاء." }, { en: "Minimal management commitment.", ar: "الحد الأدنى من التزام الإدارة." } ], answer: 0, explanation: { en: "\"Total company wide participation\" is one of the 4 dimensions.", ar: "\"المشاركة الشاملة على مستوى الشركة\" هي أحد الأبعاد الأربعة." } },
+                { q: { en: "A key step for ISO 9000 Implementation is to:", ar: "خطوة رئيسية لتطبيق ISO 9000 هي:" }, options: [ { en: "Understand the standard system and its interpretation.", ar: "فهم نظام المعايير وتفسيره." }, { en: "Avoid documentation.", ar: "تجنب التوثيق." }, { en: "Skip training programs.", ar: "تخطي برامج التدريب." }, { en: "Focus only on the final product.", ar: "التركيز على المنتج النهائي فقط." } ], answer: 0, explanation: { en: "Understanding the standard system and its interpretation is a crucial step for ISO 9000 implementation.", ar: "فهم نظام المعايير وتفسيره هو خطوة حاسمة لتطبيق ISO 9000." } },
+                { q: { en: "Another step for ISO 9000 Implementation is to:", ar: "خطوة أخرى لتطبيق ISO 9000 هي:" }, options: [ { en: "Conduct necessary training programs.", ar: "إجراء برامج التدريب اللازمة." }, { en: "Reduce quality checks.", ar: "تقليل فحوصات الجودة." }, { en: "Eliminate the quality manual.", ar: "إلغاء دليل الجودة." }, { en: "Ignore shop floor instructions.", ar: "تجاهل تعليمات أرضية المصنع." } ], answer: 0, explanation: { en: "Conducting necessary training programs is a required step for ISO 9000 implementation.", ar: "إجراء برامج التدريب اللازمة هو خطوة مطلوبة لتطبيق ISO 9000." } },
+                { q: { en: "A major benefit of the ISO 9000 Series is:", ar: "فائدة رئيسية لسلسلة ISO 9000 هي:" }, options: [ { en: "Competitive advantage in the global market.", ar: "ميزة تنافسية في السوق العالمية." }, { en: "Increased production delays.", ar: "زيادة تأخيرات الإنتاج." }, { en: "Higher operational costs.", ar: "ارتفاع تكاليف التشغيل." }, { en: "Reduced customer trust.", ar: "انخفاض ثقة العملاء." } ], answer: 0, explanation: { en: "ISO 9000 provides a competitive advantage in the global market.", ar: "توفر ISO 9000 ميزة تنافسية في السوق العالمية." } },
+                { q: { en: "Another benefit of ISO 9000 Series is:", ar: "فائدة أخرى لسلسلة ISO 9000 هي:" }, options: [ { en: "Consistency in quality, since ISO helps in detecting non-conformity early.", ar: "الاتساق في الجودة، حيث تساعد ISO في اكتشاف عدم المطابقة مبكراً." }, { en: "Hiding defects from customers.", ar: "إخفاء العيوب عن العملاء." }, { en: "Eliminating the need for documentation.", ar: "إلغاء الحاجة إلى التوثيق." }, { en: "Increasing the number of defects.", ar: "زيادة عدد العيوب." } ], answer: 0, explanation: { en: "ISO helps in detecting non-conformity early, ensuring consistency in quality.", ar: "تساعد ISO في اكتشاف عدم المطابقة مبكراً، مما يضمن الاتساق في الجودة." } },
+                { q: { en: "In ISO 9000 Registration steps, the preparation of a quality manual is done to:", ar: "في خطوات تسجيل ISO 9000، يتم إعداد دليل الجودة من أجل:" }, options: [ { en: "Cover all the elements in the selected model.", ar: "تغطية جميع العناصر في النموذج المختار." }, { en: "Replace the need for training.", ar: "استبدال الحاجة إلى التدريب." }, { en: "Confuse the employees.", ar: "إرباك الموظفين." }, { en: "Avoid systematic analysis.", ar: "تجنب التحليل المنهجي." } ], answer: 0, explanation: { en: "The quality manual is prepared to cover all the elements in the selected ISO model.", ar: "يتم إعداد دليل الجودة لتغطية جميع العناصر في نموذج ISO المختار." } },
+                { q: { en: "ISO 9000 ensures adequate and regular quality training, which aids in:", ar: "تضمن ISO 9000 تدريباً كافياً ومنتظماً على الجودة، مما يساعد في:" }, options: [ { en: "Improved morale and involvement of workers, and level of job satisfaction.", ar: "تحسين معنويات ومشاركة العمال، ومستوى الرضا الوظيفي." }, { en: "Higher employee turnover.", ar: "ارتفاع معدل دوران الموظفين." }, { en: "Decreased productivity.", ar: "انخفاض الإنتاجية." }, { en: "Increased customer complaints.", ar: "زيادة شكاوى العملاء." } ], answer: 0, explanation: { en: "Regular quality training aids in improved morale, worker involvement, and job satisfaction.", ar: "يساعد التدريب المنتظم على الجودة في تحسين المعنويات، ومشاركة العمال، والرضا الوظيفي." } },
+                { q: { en: "Customers purchasing from companies with an ISO certificate need not spend much on inspection and testing. This leads to:", ar: "لا يحتاج العملاء الذين يشترون من شركات حاصلة على شهادة ISO إلى إنفاق الكثير على الفحص والاختبار. هذا يؤدي إلى:" }, options: [ { en: "Reduced quality cost and lead-time.", ar: "تقليل تكلفة الجودة ووقت التسليم." }, { en: "Increased lead-time.", ar: "زيادة وقت التسليم." }, { en: "Higher inspection costs.", ar: "ارتفاع تكاليف الفحص." }, { en: "Decreased productivity.", ar: "انخفاض الإنتاجية." } ], answer: 0, explanation: { en: "ISO certification reduces the need for customer inspection, thereby reducing quality cost and lead-time.", ar: "تقلل شهادة ISO من الحاجة إلى فحص العملاء، مما يقلل من تكلفة الجودة ووقت التسليم." } }
+            ]
+        }
+    ];
+
+    function toggleLanguage(btn) {
+        btn.classList.add('animate');
+        setTimeout(() => {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.getElementById('main-title').innerText = translations[currentLang].mainTitle;
+            document.getElementById('sub-title').innerText = translations[currentLang].subTitle;
+            document.getElementById('fab-tooltip').innerText = translations[currentLang].fabTooltip;
+            document.getElementById('submit-btn').innerText = translations[currentLang].submitBtn;
+            document.getElementById('footer-text').innerText = translations[currentLang].footer;
+            
+            document.getElementById('tab-0').innerText = currentLang === 'en' ? 'Quiz 1' : 'الاختبار 1';
+            document.getElementById('tab-1').innerText = currentLang === 'en' ? 'Quiz 2' : 'الاختبار 2';
+
+            renderQuiz();
+            setTimeout(() => btn.classList.remove('animate'), 400);
+        }, 300);
+    }
+
+    function switchQuiz(index) {
+        currentQuizIndex = index;
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+        });
+        renderQuiz();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderQuiz() {
+        const quiz = quizzes[currentQuizIndex];
+        document.getElementById('quiz-title').innerText = quiz.title[currentLang];
+        
+        const form = document.getElementById('quiz-form');
+        form.innerHTML = '';
+
+        quiz.questions.forEach((q, qIndex) => {
+            const block = document.createElement('div');
+            block.className = 'question-block';
+            
+            let optionsHTML = '';
+            q.options.forEach((opt, oIndex) => {
+                optionsHTML += `
+                    <label class="option-card" id="label-${currentQuizIndex}-${qIndex}-${oIndex}" onclick="selectOption(this, ${qIndex}, ${oIndex})">
+                        <input type="radio" name="q${currentQuizIndex}_${qIndex}" value="${oIndex}">
+                        <div class="custom-radio"></div>
+                        <span class="option-text">${opt[currentLang]}</span>
+                    </label>
+                `;
+            });
+
+            block.innerHTML = `
+                <div class="question-text">
+                    <span class="question-number">${qIndex + 1}</span>
+                    ${q.q[currentLang]}
+                </div>
+                <div class="options">${optionsHTML}</div>
+                <div class="explanation-box" id="exp-${currentQuizIndex}-${qIndex}">
+                    <div class="explanation-header">
+                        <span class="explanation-icon">💡</span>
+                        <span>${translations[currentLang].explainTitle}</span>
+                    </div>
+                    <div class="explanation-text">${q.explanation[currentLang]}</div>
+                </div>
+            `;
+            form.appendChild(block);
+
+            // Restore Answer State
+            const savedAns = userAnswers[`q${currentQuizIndex}_${qIndex}`];
+            if (savedAns !== undefined) {
+                const label = document.getElementById(`label-${currentQuizIndex}-${qIndex}-${savedAns}`);
+                if(label) {
+                    label.classList.add('selected');
+                    label.querySelector('input').checked = true;
+                }
+            }
+
+            // Restore Submission State
+            if (submittedQuizzes[currentQuizIndex]) {
+                document.getElementById(`label-${currentQuizIndex}-${qIndex}-${q.answer}`).classList.add('correct');
+                if (savedAns !== undefined && savedAns !== q.answer) {
+                    document.getElementById(`label-${currentQuizIndex}-${qIndex}-${savedAns}`).classList.add('incorrect');
+                }
+                document.getElementById(`exp-${currentQuizIndex}-${qIndex}`).classList.add('show');
+            }
+        });
+
+        // Restore Result Box State
+        const resultBox = document.getElementById('result-box');
+        if (submittedQuizzes[currentQuizIndex]) {
+            let score = 0;
+            quiz.questions.forEach((q, qIndex) => {
+                if (userAnswers[`q${currentQuizIndex}_${qIndex}`] === q.answer) score++;
+            });
+            const total = quiz.questions.length;
+            document.getElementById('score-display').innerText = `${score} / ${total}`;
+            if (score >= total * 0.8) {
+                resultBox.className = 'result-box correct';
+                document.getElementById('result-msg').innerText = translations[currentLang].resultCorrect;
+            } else {
+                resultBox.className = 'result-box incorrect';
+                document.getElementById('result-msg').innerText = translations[currentLang].resultIncorrect;
+            }
+            resultBox.style.display = 'block';
+        } else {
+            resultBox.style.display = 'none';
+        }
+    }
+
+    function selectOption(element, qIndex, oIndex) {
+        const parent = element.parentElement;
+        parent.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+        element.classList.add('selected');
+        element.querySelector('input').checked = true;
+        userAnswers[`q${currentQuizIndex}_${qIndex}`] = oIndex;
+    }
+
+    function submitQuiz() {
+        const quiz = quizzes[currentQuizIndex];
+        let score = 0;
+        const total = quiz.questions.length;
+
+        quiz.questions.forEach((q, qIndex) => {
+            const savedAns = userAnswers[`q${currentQuizIndex}_${qIndex}`];
+            
+            q.options.forEach((_, oIndex) => {
+                const label = document.getElementById(`label-${currentQuizIndex}-${qIndex}-${oIndex}`);
+                label.classList.remove('correct', 'incorrect');
+            });
+
+            document.getElementById(`label-${currentQuizIndex}-${qIndex}-${q.answer}`).classList.add('correct');
+
+            if (savedAns !== undefined) {
+                if (savedAns === q.answer) {
+                    score++;
+                } else {
+                    document.getElementById(`label-${currentQuizIndex}-${qIndex}-${savedAns}`).classList.add('incorrect');
+                }
+            }
+
+            const expBox = document.getElementById(`exp-${currentQuizIndex}-${qIndex}`);
+            setTimeout(() => expBox.classList.add('show'), 100 + (qIndex * 50));
+        });
+
+        submittedQuizzes[currentQuizIndex] = true;
+
+        const resultBox = document.getElementById('result-box');
+        const scoreDisplay = document.getElementById('score-display');
+        const resultMsg = document.getElementById('result-msg');
+
+        resultBox.style.display = 'block';
+        scoreDisplay.innerText = `${score} / ${total}`;
+        /* 🎯 EBRA — إرسال عند تسليم المستخدم فقط (renderQuiz لا يعيد الإرسال) */
+        if (window.EBRA && window.EBRA.trackScore) {
+            window.EBRA.trackScore(score, total, "Total Quality Management — L2 Quiz " + (currentQuizIndex + 1));
+        }
+        
+        if (score >= total * 0.8) {
+            resultBox.className = 'result-box correct';
+            resultMsg.innerText = translations[currentLang].resultCorrect;
+        } else {
+            resultBox.className = 'result-box incorrect';
+            resultMsg.innerText = translations[currentLang].resultIncorrect;
+        }
+        
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    renderQuiz();
+</script>
+<!-- 🎯 جزء تتبع الدرجات (نائم في غير الكويزات) -->
+<script>
+(function () {
+  var TRACK_URL = "https://script.google.com/macros/s/AKfycbzWhqHm8sl_fogZTB_E_WEgBwJjke3qZ574Yj8f8gI9_KYUelzA4-EI2azlvFE96YlC/exec";
+  var MAX_SCORE = 10;   // ← العظمى الافتراضية عندما لا تذكر النتيجةُ علتها
+  var QUIZZES = [
+    // { selector: "#q1-result", label: "Ch1 Quiz 1" },
+    // { selector: "#q2-result", label: "Ch1 Quiz 2" },
+  ];
+
+  var vid;
+  try {
+    var pm = location.search.match(/[?&]ebra_vid=([^&]+)/);
+    if (pm) {
+      vid = decodeURIComponent(pm[1]);
+      localStorage.setItem("ebra_vid", vid);
+    } else {
+      vid = localStorage.getItem("ebra_vid");
+      if (!vid) {
+        vid = "v-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 9);
+        localStorage.setItem("ebra_vid", vid);
+      }
+    }
+  } catch (e) { vid = "v-na"; }
+
+  function post(score, max, label) {
+    fetch(TRACK_URL, {
+      method: "POST",
+      mode: "cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        type: "score",
+        visitorId: vid,
+        quiz: label || "Quiz",
+        score: score,
+        max: max,
+        percent: Math.round((score / max) * 100),
+        page: location.origin + location.pathname
+      })
+    }).catch(function () {});
+  }
+
+  function parseScore(txt) {
+    txt = txt || "";
+    var m = txt.match(/(\d+(?:[.,]\d+)?)\s*(?:\/|من|out of|-)\s*(\d+)/) || txt.match(/(\d+(?:[.,]\d+)?)/);
+    if (!m) return null;
+    return {
+      score: parseFloat(m[1].replace(",", ".")),
+      max: m[2] ? parseFloat(m[2]) : null
+    };
+  }
+
+  /* 3) اليدوي */
+  var lastManual = {};
+  window.EBRA = window.EBRA || {};
+  window.EBRA.trackScore = function (score, max, label) {
+    var k = label + "|" + score + "/" + max;
+    var now = Date.now();
+    if (lastManual[k] && now - lastManual[k] < 3000) return;
+    lastManual[k] = now;
+    post(Number(score), Number(max) || MAX_SCORE, label);
+  };
+
+  /* 1) + 2) المسح التلقائي */
+  var lastSel = {};
+  function scan() {
+    for (var i = 0; i < QUIZZES.length; i++) {
+      var qz = QUIZZES[i];
+      var el = document.querySelector(qz.selector);
+      if (!el) continue;
+      var p = parseScore(el.textContent);
+      if (!p) continue;
+      if (lastSel[qz.selector] === p.score) continue;   // إعادة المحاولة بنفس الدرجة لا تُكرر
+      lastSel[qz.selector] = p.score;
+      post(p.score, p.max || MAX_SCORE, qz.label);
+    }
+    var els = document.querySelectorAll("[data-ebra-quiz]");
+    for (var j = 0; j < els.length; j++) {
+      var el2 = els[j];
+      if (el2.getAttribute("data-ebra-done")) continue;
+      var p2 = parseScore(el2.textContent);
+      if (!p2) continue;
+      el2.setAttribute("data-ebra-done", "1");
+      post(p2.score, p2.max || MAX_SCORE, el2.getAttribute("data-ebra-quiz"));
+    }
+  }
+
+  var timer = null;
+  function queueScan() {
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(scan, 400);
+  }
+  try {
+    var mo = new MutationObserver(queueScan);
+    mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
+  } catch (e) {
+    setInterval(queueScan, 1500);
+  }
+  document.addEventListener("DOMContentLoaded", queueScan);
+  window.addEventListener("load", queueScan);
+})();
+</script>
+
+<!-- 📡 جزء تتبع الزيارات -->
+<script>
+(function () {
+  var TRACK_URL = "https://script.google.com/macros/s/AKfycbzWhqHm8sl_fogZTB_E_WEgBwJjke3qZ574Yj8f8gI9_KYUelzA4-EI2azlvFE96YlC/exec";
+  var vid;
+  try {
+    var pm = location.search.match(/[?&]ebra_vid=([^&]+)/);
+    if (pm) {
+      vid = decodeURIComponent(pm[1]);
+      localStorage.setItem("ebra_vid", vid);
+    } else {
+      vid = localStorage.getItem("ebra_vid");
+      if (!vid) {
+        vid = "v-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 9);
+        localStorage.setItem("ebra_vid", vid);
+      }
+    }
+  } catch (e) { vid = "v-na"; }
+  fetch(TRACK_URL, {
+    method: "POST",
+    mode: "cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({
+      visitorId: vid,
+      page: location.origin + location.pathname,
+      referrer: document.referrer || "Direct",
+      language: navigator.language || "",
+      screen: window.screen ? (screen.width + "x" + screen.height) : "",
+      ua: navigator.userAgent
+    })
+  }).catch(function () {});
+})();
+</script>
+
+</body>
+</html>
